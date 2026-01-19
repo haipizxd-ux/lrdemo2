@@ -1,54 +1,162 @@
----
-output: github_document
----
+# lrdemo2
 
-<!-- README.md is generated from README.Rmd. Please edit that file -->
+> A minimal demo R package for learning ligand–receptor analysis and R package development.
 
-```{r, include = FALSE}
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>",
-  fig.path = "man/figures/README-",
-  out.width = "100%"
+`lrdemo2` 是一个**教学示例 R 包**，用于演示：
+
+-   如何从零开始构建一个规范的 R 包
+-   如何在包中生成并注册示例数据
+-   如何实现并测试一个简单的 **ligand–receptor 活性评分流程**
+-   如何完成文档、测试、检查并发布到 GitHub
+
+该包**不以算法创新为目标**，而是强调**结构清晰、可学习、可复现**。
+
+------------------------------------------------------------------------
+
+## ✨ Features
+
+-   📦 标准 R 包结构（`DESCRIPTION / NAMESPACE / R / man / tests / data`）
+-   🧪 内置示例 ligand–receptor 数据集
+-   📊 简单直观的 ligand–receptor 活性打分函数
+-   📈 基于 `ggplot2` 的可视化结果
+-   🧰 完整的 roxygen2 文档与 testthat 测试示例
+
+------------------------------------------------------------------------
+
+## 📦 Installation
+
+### 从 GitHub 安装（推荐）
+
+``` r
+# install.packages("devtools")
+devtools::install_github("ZhouXudong/lrdemo2")
+```
+
+> 如果你只是本地学习，也可以直接 `devtools::install()` 安装开发版。
+
+------------------------------------------------------------------------
+
+## 🚀 Quick Start
+
+### 1️⃣ 加载包
+
+``` r
+library(lrdemo2)
+```
+
+查看包级文档：
+
+``` r
+?lrdemo2
+```
+
+------------------------------------------------------------------------
+
+### 2️⃣ 生成示例数据
+
+``` r
+dat <- make_example_data(seed = 42)
+str(dat)
+```
+
+返回的是一个 list，包含：
+
+-   `expr_sender`：发送细胞中 ligand 的表达向量
+-   `expr_receiver`：接收细胞中 receptor 的表达向量
+-   `lr_network`：ligand–receptor 对应关系表
+
+------------------------------------------------------------------------
+
+### 3️⃣ 计算 ligand–receptor 活性
+
+``` r
+lr_res <- score_active_lr(
+  expr_sender     = dat$expr_sender,
+  expr_receiver   = dat$expr_receiver,
+  lr_network      = dat$lr_network,
+  sender_cutoff   = 1,
+  receiver_cutoff = 1
 )
 ```
 
-# lrdemo2
-
-<!-- badges: start -->
-<!-- badges: end -->
-
-The goal of lrdemo2 is to ...
-
-## Installation
-
-You can install the development version of lrdemo2 like so:
+查看结果：
 
 ``` r
-# FILL THIS IN! HOW CAN PEOPLE INSTALL YOUR DEV PACKAGE?
+head(lr_res)
+nrow(lr_res)
 ```
 
-## Example
+返回结果为一个 `data.frame`，每一行代表一个 **活跃的 ligand–receptor 对**。
 
-This is a basic example which shows you how to solve a common problem:
+------------------------------------------------------------------------
 
-```{r example}
-library(lrdemo2)
-## basic example code
+### 4️⃣ 可视化结果
+
+``` r
+plot_lr_results(lr_res)
 ```
 
-What is special about using `README.Rmd` instead of just `README.md`? You can include R chunks like so:
+该函数会生成 **两个图形**：
 
-```{r cars}
-summary(cars)
+1.  ligand–receptor 活性分数分布
+2.  Top ligand–receptor 对的可视化展示
+
+------------------------------------------------------------------------
+
+## 📂 Included Example Data
+
+你也可以直接加载包内注册的数据：
+
+``` r
+data(example_lr)
+str(example_lr)
 ```
 
-You'll still need to render `README.Rmd` regularly, to keep `README.md` up-to-date. `devtools::build_readme()` is handy for this.
+该数据与 `make_example_data()` 生成的数据结构一致，适合：
 
-You can also embed plots, for example:
+-   写 vignette
+-   单元测试
+-   教学示例
 
-```{r pressure, echo = FALSE}
-plot(pressure)
+------------------------------------------------------------------------
+
+## 🧪 Testing
+
+本包使用 **testthat** 进行单元测试。
+
+``` r
+devtools::test()
 ```
 
-In that case, don't forget to commit and push the resulting figure files, so they display on GitHub and CRAN.
+测试文件位于：
+
+``` text
+tests/testthat/
+└── test-lr_demo.R
+```
+
+------------------------------------------------------------------------
+
+## 📚 Learning Purpose
+
+本包特别适合用于学习以下内容：
+
+-   `usethis::create_package()` 的完整工作流
+-   `roxygen2` 文档体系（`#'` 注释 → `.Rd` → `NAMESPACE`）
+-   如何在 R 包中正确声明和使用依赖
+-   如何注册并分发示例数据
+-   如何通过 `devtools::check()` 通过 CRAN 风格检查
+
+------------------------------------------------------------------------
+
+## 📜 License
+
+MIT License © Zhou Xudong
+
+------------------------------------------------------------------------
+
+## 🙌 Acknowledgement
+
+This package is created purely for **educational and demonstration purposes**. Feel free to fork, modify, and reuse it for teaching or learning R package development.
+
+------------------------------------------------------------------------
