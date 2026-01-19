@@ -16,3 +16,5 @@ Imports:
 Depends: 
     R (>= 3.5)
 LazyData: true
+URL: https://github.com/haipizxd-ux/lrdemo2
+BugReports: https://github.com/haipizxd-ux/lrdemo2/issues
