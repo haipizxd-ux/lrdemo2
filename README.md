@@ -29,7 +29,7 @@
 
 ``` r
 # install.packages("devtools")
-devtools::install_github("ZhouXudong/lrdemo2")
+devtools::install_github("haipizxd-ux/lrdemo2")
 ```
 
 > 如果你只是本地学习，也可以直接 `devtools::install()` 安装开发版。
